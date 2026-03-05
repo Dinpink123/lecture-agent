@@ -12,10 +12,17 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 app.use(express.json({ limit: "50mb" }));
-app.use(express.static(path.join(__dirname, "public")));
+const fs = require("fs");
+const pubDir = path.join(__dirname, "public");
+const pubNested = path.join(__dirname, "public", "index.html");
+if (fs.existsSync(pubNested) && fs.statSync(pubNested).isDirectory()) {
+  app.use(express.static(pubNested));
+} else {
+  app.use(express.static(pubDir));
+}
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8080;
 
 // ─── Session store (simple in-memory) ───────────────────────────────────────
 const sessions = new Map();       // sessionId → session data
@@ -325,7 +332,7 @@ app.get("/health", (req, res) =>
 
 // ─── Serve frontend for all other routes ─────────────────────────────────────
 app.get("*", (req, res) =>
-  res.sendFile(path.join(__dirname, "public", "index.html"))
+  const htmlPath = fs.existsSync(path.join(__dirname,"public","index.html","index.html")) ? path.join(__dirname,"public","index.html","index.html") : path.join(__dirname,"public","index.html"); res.sendFile(htmlPath)
 );
 
 server.listen(PORT, () => {
