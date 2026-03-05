@@ -226,7 +226,60 @@
     border-radius: 10px;
     font-size: 12px; color: var(--gold); line-height: 1.5;
   }
-</style>
+
+    .meta-inputs {
+      margin: 0 0 8px 0;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .meta-row {
+      display: flex;
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      gap: 10px;
+    }
+    .meta-row-split {
+      background: transparent;
+      border: none;
+      padding: 0;
+      gap: 8px;
+    }
+    .meta-half {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      gap: 10px;
+    }
+    .meta-icon { font-size: 16px; flex-shrink: 0; }
+    .meta-inputs input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'Heebo', sans-serif;
+      font-size: 14px;
+      text-align: right;
+      direction: rtl;
+      width: 100%;
+    }
+    .meta-inputs input::placeholder { color: var(--muted); }
+    .meta-hint {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    </style>
 </head>
 <body>
 
@@ -253,6 +306,26 @@
       <span>הסיכום יישמר אוטומטית</span>
     </div>
     <div class="auth-arrow">›</div>
+  </div>
+
+
+  <!-- Course / Lesson inputs -->
+  <div class="meta-inputs" id="metaInputs">
+    <div class="meta-row">
+      <span class="meta-icon">📚</span>
+      <input type="text" id="courseNameInput" placeholder="שם הקורס (אופציונלי – יזוהה אוטומטית)" />
+    </div>
+    <div class="meta-row meta-row-split">
+      <div class="meta-half">
+        <span class="meta-icon">🔢</span>
+        <input type="number" id="lessonNumInput" placeholder="מספר שיעור" min="1" />
+      </div>
+      <div class="meta-half">
+        <span class="meta-icon">📅</span>
+        <input type="text" id="lessonDateInput" placeholder="תאריך שיעור (אופציונלי)" />
+      </div>
+    </div>
+    <div class="meta-hint">אם לא תמלא – יזוהה אוטומטית מהדיבור</div>
   </div>
 
   <!-- Warning -->
@@ -516,6 +589,8 @@ async function runSummary(isFinal) {
         transcript: chunkToProcess || fullTranscript,
         currentOutline,
         isFinal,
+        courseName: document.getElementById('courseNameInput').value.trim() || null,
+        lessonNum: document.getElementById('lessonNumInput').value || null,
       }),
     });
 
@@ -547,7 +622,13 @@ async function exportToDocs() {
     const res = await fetch('/api/create-doc', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId, outline: currentOutline, transcript: fullTranscript }),
+      body: JSON.stringify({
+        sessionId,
+        outline: currentOutline,
+        transcript: fullTranscript,
+        lessonNum: document.getElementById('lessonNumInput').value || null,
+        lessonDate: document.getElementById('lessonDateInput').value.trim() || null,
+      }),
     });
 
     const data = await res.json();
@@ -556,7 +637,9 @@ async function exportToDocs() {
       document.getElementById('exportLabel').textContent = '✅ נפתח ב-Google Docs';
       document.getElementById('exportBtn').disabled = false;
       window.open(data.docUrl, '_blank');
-      toast('✅ המסמך נוצר בהצלחה!', 'success');
+      const cn = data.courseName || '';
+      const ln = data.lessonNum || '';
+      toast('✅ שיעור ' + ln + (cn ? ' – ' + cn : '') + ' נשמר!', 'success');
     } else {
       throw new Error(data.error || 'שגיאה לא ידועה');
     }
