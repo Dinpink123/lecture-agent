@@ -73,29 +73,13 @@ app.post("/api/summarize", async (req, res) => {
 
   try {
     const isFinalSummary = isFinal;
-    const SUMMARY_PROMPT = `אתה עוזר אקדמי מומחה שמסכם הרצאות אקדמיות בעברית.
-${manualCourse ? `שם הקורס: "${manualCourse}"` : "זהה את שם הקורס מהדיבור."}
-${manualLesson ? `מספר השיעור: ${manualLesson}` : "זהה מספר שיעור מהדיבור אם אפשר."}
+    const finalInstructions = isFinalSummary
+      ? "זהו הסיכום הסופי. תקן טעויות כתיב, הסר גמגומים וחזרות, ארגן בצורה לוגית ומקצועית, והעשר עם מידע רלוונטי."
+      : "סכם את החלק הנוכחי בקצרה.";
+    const courseHint = manualCourse ? `שם הקורס: "${manualCourse}".` : "נסה לזהות את שם הקורס מהדיבור.";
+    const lessonHint = manualLesson ? `מספר השיעור: ${manualLesson}.` : "נסה לזהות מספר שיעור מהדיבור.";
 
-${isFinalSummary ? `זהו הסיכום הסופי של כל ההרצאה. עליך:
-1. לתקן טעויות כתיב ודקדוק בתמלול
-2. לסדר ולנקות את התוכן (להסיר גמגומים, חזרות מיותרות)
-3. לארגן את החומר בצורה לוגית ומקצועית
-4. להעשיר עם מידע רלוונטי מהידע הכללי שלך על כל נושא שהוזכר
-5. לכתוב סיכום מקיף ומפורט` : `סכם את החלק הנוכחי בקצרה.`}
-
-החזר JSON בלבד ללא markdown:
-{
-  "course_name": "שם הקורס",
-  "lesson_number": 1,
-  "lesson_date": "תאריך אם הוזכר",
-  "lecture_title": "כותרת השיעור",
-  "quick_summary": "סיכום מקיף של 5-8 שורות המתאר את כל עיקרי השיעור בצורה ברורה",
-  "topics": [{"title": "נושא ראשי", "subtopics": [{"title": "תת-נושא", "bullets": ["נקודה מפורטת 1", "נקודה מפורטת 2"], "examples": ["דוגמה"], "enrichment": "הרחבה ומידע נוסף מהידע הכללי"}]}],
-  "definitions": [{"term": "מושג", "meaning": "הגדרה מלאה ומדויקת", "enrichment": "הקשר ומידע נוסף"}],
-  "cases_or_laws": [{"name": "שם פסק דין / חוק", "context": "הקשר ומשמעות", "enrichment": "מידע נוסף חשוב"}],
-  "exam_questions": [{"question": "שאלה אפשרית לבחינה", "hint": "רמז לתשובה"}]
-}`;
+    const SUMMARY_PROMPT = "אתה עוזר אקדמי מומחה שמסכם הרצאות אקדמיות בעברית. " + courseHint + " " + lessonHint + " " + finalInstructions + " החזר JSON בלבד ללא markdown בפורמט: {course_name, lesson_number, lesson_date, lecture_title, quick_summary, topics: [{title, subtopics: [{title, bullets, examples, enrichment}]}], definitions: [{term, meaning, enrichment}], cases_or_laws: [{name, context, enrichment}], exam_questions: [{question, hint}]}";
 
     const userMsg = (currentOutline ? "outline קיים:\n" + JSON.stringify(currentOutline) + "\n\n" : "") +
       "transcript:\n" + transcript +
