@@ -167,11 +167,12 @@
 
   /* ── Bottom Controls ── */
   .controls {
-    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 100%; max-width: 480px;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    width: 100%;
     padding: 16px 20px 32px;
     background: linear-gradient(0deg, var(--bg) 60%, transparent);
     display: flex; flex-direction: column; gap: 10px;
+    box-sizing: border-box;
   }
 
   .btn-record {
@@ -380,6 +381,58 @@
       margin: 0 !important;
     }
     body { padding-bottom: 150px !important; }
+
+    
+    /* ─── Final mobile fix ─── */
+    html, body {
+      overflow-x: hidden !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    
+    * { box-sizing: border-box !important; }
+
+    input, button {
+      -webkit-appearance: none;
+      appearance: none;
+      font-size: 16px;
+    }
+
+    .meta-inputs input {
+      font-size: 16px !important;
+      pointer-events: auto !important;
+    }
+
+    .controls {
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100vw !important;
+      padding: 10px 16px 28px 16px !important;
+      background: var(--bg) !important;
+      border-top: 1px solid var(--border) !important;
+      z-index: 9999 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 8px !important;
+      margin: 0 !important;
+    }
+
+    .btn-record, .btn-secondary {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      display: block !important;
+      margin: 0 !important;
+      padding: 13px 16px !important;
+      font-size: 15px !important;
+      border-radius: 12px !important;
+      text-align: center !important;
+    }
+
+    body { padding-bottom: 160px !important; }
+    /* ─── Final mobile fix ─── */
 
     </style>
 </head>
