@@ -279,6 +279,71 @@
       text-align: center;
     }
 
+    
+    /* ─── Mobile fixes ─── */
+    * { -webkit-tap-highlight-color: transparent; }
+    
+    input, button { 
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+    
+    .meta-inputs input {
+      font-size: 16px !important; /* prevents iOS zoom */
+      padding: 4px 0;
+      min-height: 24px;
+      pointer-events: auto !important;
+      z-index: 10;
+      position: relative;
+    }
+    
+    .meta-row, .meta-half {
+      cursor: text;
+      pointer-events: auto !important;
+    }
+
+    .controls {
+      position: fixed !important;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 16px 28px;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-record {
+      width: 100%;
+      padding: 14px !important;
+      font-size: 16px !important;
+      border-radius: 12px !important;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 12px !important;
+      font-size: 14px !important;
+      border-radius: 12px !important;
+    }
+
+    /* space for fixed controls */
+    body { padding-bottom: 140px !important; }
+
+    .panels { padding-bottom: 8px; }
+
+    /* smaller transcript/outline boxes on mobile */
+    @media (max-width: 480px) {
+      .transcript-box { max-height: 120px !important; min-height: 80px !important; }
+      .outline-box { max-height: 180px !important; }
+      .timer { font-size: 28px !important; }
+      h1, .app-title { font-size: 18px !important; }
+    }
+
     </style>
 </head>
 <body>
