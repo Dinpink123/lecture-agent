@@ -337,7 +337,7 @@
   <!-- Warning -->
   <div class="panels">
     <div class="warning" id="screenWarn" style="display:none">
-      ⚠️ <strong>חשוב:</strong> השאר את המסך דלוק בזמן ההקלטה. iOS יעצור את המיקרופון אם המסך ייכבה.
+      ⚠️ <strong>חשוב:</strong> השאר את המסך דלוק. שיחה נכנסת תעצור את ההקלטה – לאחר השיחה לחץ "המשך הקלטה".
     </div>
   </div>
 
@@ -777,6 +777,36 @@ function getSupportedMimeType() {
   const types = ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4'];
   return types.find(t => MediaRecorder.isTypeSupported(t)) || '';
 }
+
+// ─── Auto-resume after phone call / screen lock ──────────────────────────────
+document.addEventListener('visibilitychange', async () => {
+  if (!isRecording) return;
+  if (document.visibilityState === 'visible') {
+    // חזרנו מרקע – ודא שההקלטה עדיין פעילה
+    setTimeout(() => {
+      if (isRecording && mediaRecorder && mediaRecorder.state === 'inactive') {
+        toast('▶️ ממשיך הקלטה...', 'info');
+        try {
+          mediaRecorder.start(3000);
+        } catch(e) {
+          // אם המיקרופון נעצר – הודע למשתמש
+          toast('⚠️ המיקרופון נגדע – לחץ הקלט שוב', 'error');
+          isRecording = false;
+          updateRecordUI(false);
+        }
+      }
+    }, 500);
+  }
+});
+
+window.addEventListener('focus', () => {
+  if (!isRecording) return;
+  if (mediaRecorder && mediaRecorder.state === 'inactive') {
+    toast('▶️ ממשיך הקלטה...', 'info');
+    try { mediaRecorder.start(3000); } catch(e) {}
+  }
+});
+
 </script>
 </body>
 </html>
