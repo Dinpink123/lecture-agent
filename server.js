@@ -92,7 +92,29 @@ app.post("/api/summarize", async (req, res) => {
       response_format: { type: "json_object" },
     });
 
-    const outline = JSON.parse(response.choices[0].message.content);
+    let outline;
+    try {
+      outline = JSON.parse(response.choices[0].message.content);
+    } catch(parseErr) {
+      // נסה לחלץ JSON מתוך הטקסט אם יש
+      const raw = response.choices[0].message.content;
+      const match = raw.match(/\{[\s\S]*\}/);
+      if (match) {
+        outline = JSON.parse(match[0]);
+      } else {
+        // צור outline בסיסי מהטקסט
+        outline = {
+          course_name: manualCourse || "כללי",
+          lesson_number: manualLesson || 1,
+          lecture_title: "שיעור",
+          quick_summary: raw.slice(0, 500),
+          topics: [],
+          definitions: [],
+          cases_or_laws: [],
+          exam_questions: []
+        };
+      }
+    }
     res.json({ outline });
   } catch (err) {
     res.status(500).json({ error: err.message });
