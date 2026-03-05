@@ -127,7 +127,7 @@
   .panel-body { padding: 14px 16px; }
   .panel.collapsed .panel-body { display: none; }
 
-  .transcript-box { overflow-y: auto; max-height: 280px; min-height: 120px; padding: 12px; font-size: 14px; line-height: 1.8; direction: rtl; text-align: right; }
+  .transcript-box { overflow-y: auto; max-height: 260px; min-height: 100px; padding: 12px; font-size: 14px; line-height: 1.8; direction: rtl; text-align: right; }
   .transcript-box::-webkit-scrollbar { width: 3px; }
   .transcript-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 
@@ -135,7 +135,7 @@
   .empty-hint { color: var(--muted); font-size: 13px; }
 
   /* Outline */
-  .outline-box { overflow-y: auto; max-height: 320px; min-height: 120px; padding: 12px; font-size: 13px; line-height: 1.7; direction: rtl; text-align: right; }
+  .outline-box { overflow-y: auto; max-height: 300px; min-height: 100px; padding: 12px; font-size: 13px; line-height: 1.7; direction: rtl; text-align: right; }
   .topic-title { font-size: 15px; font-weight: 700; color: var(--accent); margin: 10px 0 4px; }
   .topic-title:first-child { margin-top: 0; }
   .subtopic-title { font-size: 13px; font-weight: 600; color: var(--accent2); margin: 6px 0 2px; padding-right: 10px; }
@@ -222,68 +222,19 @@
     font-size: 12px; color: var(--gold); line-height: 1.5;
   }
 
-    .transcript-line { margin-bottom: 6px; }
-    .transcript-time { 
-      font-size: 11px; 
-      color: var(--muted); 
-      margin-left: 6px; 
-      font-variant-numeric: tabular-nums;
-      direction: ltr;
-      display: inline-block;
-    }
-
-  
-    .meta-inputs {
-      margin: 0 0 8px 0;
-      padding: 0 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .meta-row {
-      display: flex;
-      align-items: center;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 10px 14px;
-      gap: 10px;
-      box-sizing: border-box;
-    }
-    .meta-row-split {
-      background: transparent;
-      border: none;
-      padding: 0;
-      gap: 8px;
-    }
-    .meta-half {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 10px 14px;
-      gap: 10px;
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
+    body { padding-bottom: 160px !important; }
+    input { font-size: 16px !important; -webkit-appearance: none; }
+    .transcript-line { margin-bottom: 4px; }
+    .transcript-time { font-size: 11px; color: var(--muted); margin-left: 6px; direction: ltr; display: inline-block; }
+    .meta-inputs { margin: 0 0 8px; padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+    .meta-row { display: flex; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; gap: 10px; }
+    .meta-row-split { background: transparent; border: none; padding: 0; gap: 8px; }
+    .meta-half { flex: 1; display: flex; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; gap: 10px; }
     .meta-icon { font-size: 16px; flex-shrink: 0; }
-    .meta-inputs input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text);
-      font-family: 'Heebo', sans-serif;
-      font-size: 16px;
-      text-align: right;
-      direction: rtl;
-      width: 100%;
-      -webkit-appearance: none;
-    }
+    .meta-inputs input { flex: 1; background: transparent; border: none; outline: none; color: var(--text); font-family: 'Heebo', sans-serif; font-size: 16px !important; text-align: right; direction: rtl; width: 100%; }
     .meta-inputs input::placeholder { color: var(--muted); }
     .meta-hint { font-size: 11px; color: var(--muted); text-align: center; }
-    body { padding-bottom: 160px !important; }
 
   </style>
 </head>
@@ -315,7 +266,6 @@
   </div>
 
 
-  <!-- Course / Lesson inputs -->
   <div class="meta-inputs" id="metaInputs">
     <div class="meta-row">
       <span class="meta-icon">📚</span>
@@ -328,7 +278,7 @@
       </div>
       <div class="meta-half">
         <span class="meta-icon">📅</span>
-        <input type="text" id="lessonDateInput" placeholder="תאריך שיעור (אופציונלי)" />
+        <input type="text" id="lessonDateInput" placeholder="תאריך שיעור" />
       </div>
     </div>
     <div class="meta-hint">אם לא תמלא – יזוהה אוטומטית מהדיבור</div>
@@ -337,7 +287,7 @@
   <!-- Warning -->
   <div class="panels">
     <div class="warning" id="screenWarn" style="display:none">
-      ⚠️ <strong>חשוב:</strong> השאר את המסך דלוק. שיחה נכנסת תעצור את ההקלטה – לאחר השיחה לחץ "המשך הקלטה".
+      ⚠️ <strong>חשוב:</strong> השאר את המסך דלוק בזמן ההקלטה. iOS יעצור את המיקרופון אם המסך ייכבה.
     </div>
   </div>
 
@@ -463,7 +413,7 @@ async function startRecording() {
     };
 
     // כל 30 שניות שלח chunk לתמלול
-    mediaRecorder.start(30000);
+    mediaRecorder.start(10000);
 
     mediaRecorder.onstop = async () => {
       stream.getTracks().forEach(t => t.stop());
@@ -477,7 +427,7 @@ async function startRecording() {
       if (audioChunks.length > 0) {
         await transcribeChunks(false);
       }
-    }, 30000);
+    }, 10000);
 
     isRecording = true;
     setStatus('recording', 'מקליט');
@@ -532,9 +482,13 @@ async function transcribeChunks(isFinal) {
   setStatus('active', 'מתמלל...');
 
   try {
-    const blob = new Blob(chunksToProcess, { type: chunksToProcess[0].type });
+    const mimeType = chunksToProcess[0].type || 'audio/mp4';
+    const blob = new Blob(chunksToProcess, { type: mimeType });
+    let ext = 'webm';
+    if (mimeType.includes('mp4') || mimeType.includes('aac')) ext = 'mp4';
+    else if (mimeType.includes('ogg')) ext = 'ogg';
     const formData = new FormData();
-    formData.append('file', blob, 'audio.webm');
+    formData.append('file', blob, 'audio.' + ext);
     formData.append('model', 'whisper-1');
     formData.append('language', 'he');
     formData.append('prompt', 'זוהי הרצאה אקדמית בעברית. תמלל במדויק.');
@@ -624,20 +578,12 @@ async function exportToDocs() {
     toast('❌ אין תמלול לשמור', 'error');
     return;
   }
-  // תמיד רץ סיכום סופי מלא לפני שמירה
-  document.getElementById('exportLabel').textContent = '⏳ מסכם את ההרצאה...';
+  // סיכום סופי לפני שמירה
+  document.getElementById('exportLabel').textContent = '⏳ מסכם...';
   document.getElementById('exportBtn').disabled = true;
   await runSummary(true);
-  await new Promise(r => setTimeout(r, 1500));
-  if (!currentOutline) {
-    toast('❌ הסיכום נכשל, נסה שוב', 'error');
-    document.getElementById('exportLabel').textContent = '📄 שמור ב-Google Docs';
-    document.getElementById('exportBtn').disabled = false;
-    return;
-  }
-
-  document.getElementById('exportLabel').textContent = '⏳ יוצר מסמך...';
-  document.getElementById('exportBtn').disabled = true;
+  await new Promise(r => setTimeout(r, 2000));
+  document.getElementById('exportLabel').textContent = '⏳ שומר בדוקס...';
 
   try {
     const res = await fetch('/api/create-doc', {
@@ -645,7 +591,7 @@ async function exportToDocs() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         sessionId,
-        outline: currentOutline,
+        outline: currentOutline || { course_name: document.getElementById('courseNameInput').value.trim() || 'כללי', lecture_title: 'שיעור', quick_summary: fullTranscript.slice(0, 300), topics: [], definitions: [], cases_or_laws: [], exam_questions: [] },
         transcript: fullTranscript,
         lessonNum: document.getElementById('lessonNumInput').value || null,
         lessonDate: document.getElementById('lessonDateInput').value.trim() || null,
@@ -680,12 +626,8 @@ function renderTranscript() {
   }
   const lines = fullTranscript.split('\n').filter(l => l.trim());
   box.innerHTML = lines.map(line => {
-    const timeMatch = line.match(/^\[(\d{2}:\d{2})\]\s*/);
-    if (timeMatch) {
-      const time = timeMatch[1];
-      const text = line.replace(/^\[\d{2}:\d{2}\]\s*/, '');
-      return `<div class="transcript-line"><span class="transcript-time">[${time}]</span> ${text}</div>`;
-    }
+    const m = line.match(/^\[(\d{2}:\d{2})\]\s*/);
+    if (m) return `<div class="transcript-line"><span class="transcript-time">[${m[1]}]</span> ${line.replace(/^\[\d{2}:\d{2}\]\s*/, '')}</div>`;
     return `<div class="transcript-line">${line}</div>`;
   }).join('');
   box.scrollTop = box.scrollHeight;
@@ -774,37 +716,21 @@ function toast(msg, type='') {
 }
 
 function getSupportedMimeType() {
-  const types = ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4'];
-  return types.find(t => MediaRecorder.isTypeSupported(t)) || '';
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const types = isIOS
+    ? ['audio/mp4', 'audio/aac', 'audio/webm;codecs=opus', 'audio/webm']
+    : ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus', 'audio/mp4'];
+  return types.find(t => MediaRecorder.isTypeSupported(t)) || 'audio/mp4';
 }
 
-// ─── Auto-resume after phone call / screen lock ──────────────────────────────
-document.addEventListener('visibilitychange', async () => {
-  if (!isRecording) return;
-  if (document.visibilityState === 'visible') {
-    // חזרנו מרקע – ודא שההקלטה עדיין פעילה
-    setTimeout(() => {
-      if (isRecording && mediaRecorder && mediaRecorder.state === 'inactive') {
-        toast('▶️ ממשיך הקלטה...', 'info');
-        try {
-          mediaRecorder.start(3000);
-        } catch(e) {
-          // אם המיקרופון נעצר – הודע למשתמש
-          toast('⚠️ המיקרופון נגדע – לחץ הקלט שוב', 'error');
-          isRecording = false;
-          updateRecordUI(false);
-        }
-      }
-    }, 500);
-  }
-});
-
-window.addEventListener('focus', () => {
-  if (!isRecording) return;
-  if (mediaRecorder && mediaRecorder.state === 'inactive') {
-    toast('▶️ ממשיך הקלטה...', 'info');
-    try { mediaRecorder.start(3000); } catch(e) {}
-  }
+document.addEventListener('visibilitychange', () => {
+  if (!isRecording || document.visibilityState !== 'visible') return;
+  setTimeout(() => {
+    if (mediaRecorder && mediaRecorder.state === 'inactive') {
+      try { mediaRecorder.start(10000); toast('▶️ ממשיך הקלטה', 'info'); }
+      catch(e) { toast('⚠️ לחץ הקלט שוב', 'error'); isRecording = false; updateRecordUI && updateRecordUI(false); }
+    }
+  }, 500);
 });
 
 </script>
