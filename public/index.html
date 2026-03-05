@@ -127,12 +127,7 @@
   .panel-body { padding: 14px 16px; }
   .panel.collapsed .panel-body { display: none; }
 
-  .transcript-box {
-    min-height: 80px; max-height: 200px; overflow-y: auto;
-    font-size: 14px; line-height: 1.8;
-    color: var(--text);
-    word-break: break-word;
-  }
+  .transcript-box { overflow-y: auto; max-height: 280px; min-height: 120px; padding: 12px; font-size: 14px; line-height: 1.8; direction: rtl; text-align: right; }
   .transcript-box::-webkit-scrollbar { width: 3px; }
   .transcript-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 
@@ -140,7 +135,7 @@
   .empty-hint { color: var(--muted); font-size: 13px; }
 
   /* Outline */
-  .outline-box { font-size: 13px; line-height: 1.7; }
+  .outline-box { overflow-y: auto; max-height: 320px; min-height: 120px; padding: 12px; font-size: 13px; line-height: 1.7; direction: rtl; text-align: right; }
   .topic-title { font-size: 15px; font-weight: 700; color: var(--accent); margin: 10px 0 4px; }
   .topic-title:first-child { margin-top: 0; }
   .subtopic-title { font-size: 13px; font-weight: 600; color: var(--accent2); margin: 6px 0 2px; padding-right: 10px; }
@@ -168,11 +163,10 @@
   /* ── Bottom Controls ── */
   .controls {
     position: fixed; bottom: 0; left: 0; right: 0;
-    width: 100%;
+    width: 100%; box-sizing: border-box;
     padding: 16px 20px 32px;
     background: linear-gradient(0deg, var(--bg) 60%, transparent);
     display: flex; flex-direction: column; gap: 10px;
-    box-sizing: border-box;
   }
 
   .btn-record {
@@ -228,6 +222,17 @@
     font-size: 12px; color: var(--gold); line-height: 1.5;
   }
 
+    .transcript-line { margin-bottom: 6px; }
+    .transcript-time { 
+      font-size: 11px; 
+      color: var(--muted); 
+      margin-left: 6px; 
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      display: inline-block;
+    }
+
+  
     .meta-inputs {
       margin: 0 0 8px 0;
       padding: 0 16px;
@@ -243,6 +248,7 @@
       border-radius: var(--radius);
       padding: 10px 14px;
       gap: 10px;
+      box-sizing: border-box;
     }
     .meta-row-split {
       background: transparent;
@@ -259,6 +265,7 @@
       border-radius: var(--radius);
       padding: 10px 14px;
       gap: 10px;
+      box-sizing: border-box;
     }
     .meta-icon { font-size: 16px; flex-shrink: 0; }
     .meta-inputs input {
@@ -268,173 +275,17 @@
       outline: none;
       color: var(--text);
       font-family: 'Heebo', sans-serif;
-      font-size: 14px;
+      font-size: 16px;
       text-align: right;
       direction: rtl;
       width: 100%;
+      -webkit-appearance: none;
     }
     .meta-inputs input::placeholder { color: var(--muted); }
-    .meta-hint {
-      font-size: 11px;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    
-    /* ─── Mobile fixes ─── */
-    * { -webkit-tap-highlight-color: transparent; }
-    
-    input, button { 
-      -webkit-appearance: none;
-      appearance: none;
-      cursor: pointer;
-    }
-    
-    .meta-inputs input {
-      font-size: 16px !important; /* prevents iOS zoom */
-      padding: 4px 0;
-      min-height: 24px;
-      pointer-events: auto !important;
-      z-index: 10;
-      position: relative;
-    }
-    
-    .meta-row, .meta-half {
-      cursor: text;
-      pointer-events: auto !important;
-    }
-
-    .controls {
-      position: fixed !important;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 12px 16px 28px;
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .btn-record {
-      width: 100%;
-      padding: 14px !important;
-      font-size: 16px !important;
-      border-radius: 12px !important;
-    }
-
-    .btn-secondary {
-      width: 100%;
-      padding: 12px !important;
-      font-size: 14px !important;
-      border-radius: 12px !important;
-    }
-
-    /* space for fixed controls */
-    body { padding-bottom: 140px !important; }
-
-    .panels { padding-bottom: 8px; }
-
-    /* smaller transcript/outline boxes on mobile */
-    @media (max-width: 480px) {
-      .transcript-box { max-height: 120px !important; min-height: 80px !important; }
-      .outline-box { max-height: 180px !important; }
-      .timer { font-size: 28px !important; }
-      h1, .app-title { font-size: 18px !important; }
-    }
-
-    
-    /* ─── Button fix ─── */
-    .controls {
-      position: fixed !important;
-      bottom: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-      padding: 10px 16px 24px !important;
-      background: var(--bg) !important;
-      border-top: 1px solid var(--border) !important;
-      z-index: 999 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 8px !important;
-    }
-    .btn-record {
-      width: 100% !important;
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-      padding: 13px 20px !important;
-      font-size: 15px !important;
-      border-radius: 12px !important;
-      margin: 0 !important;
-    }
-    .btn-secondary {
-      width: 100% !important;
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-      padding: 11px 20px !important;
-      font-size: 13px !important;
-      border-radius: 12px !important;
-      margin: 0 !important;
-    }
-    body { padding-bottom: 150px !important; }
-
-    
-    /* ─── Final mobile fix ─── */
-    html, body {
-      overflow-x: hidden !important;
-      width: 100% !important;
-      max-width: 100% !important;
-    }
-    
-    * { box-sizing: border-box !important; }
-
-    input, button {
-      -webkit-appearance: none;
-      appearance: none;
-      font-size: 16px;
-    }
-
-    .meta-inputs input {
-      font-size: 16px !important;
-      pointer-events: auto !important;
-    }
-
-    .controls {
-      position: fixed !important;
-      bottom: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      width: 100vw !important;
-      padding: 10px 16px 28px 16px !important;
-      background: var(--bg) !important;
-      border-top: 1px solid var(--border) !important;
-      z-index: 9999 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 8px !important;
-      margin: 0 !important;
-    }
-
-    .btn-record, .btn-secondary {
-      width: 100% !important;
-      max-width: 100% !important;
-      min-width: 0 !important;
-      display: block !important;
-      margin: 0 !important;
-      padding: 13px 16px !important;
-      font-size: 15px !important;
-      border-radius: 12px !important;
-      text-align: center !important;
-    }
-
+    .meta-hint { font-size: 11px; color: var(--muted); text-align: center; }
     body { padding-bottom: 160px !important; }
-    /* ─── Final mobile fix ─── */
 
-    </style>
+  </style>
 </head>
 <body>
 
@@ -769,6 +620,21 @@ async function exportToDocs() {
     handleGoogleAuth();
     return;
   }
+  if (!fullTranscript || !fullTranscript.trim()) {
+    toast('❌ אין תמלול לשמור', 'error');
+    return;
+  }
+  // תמיד רץ סיכום סופי מלא לפני שמירה
+  document.getElementById('exportLabel').textContent = '⏳ מסכם את ההרצאה...';
+  document.getElementById('exportBtn').disabled = true;
+  await runSummary(true);
+  await new Promise(r => setTimeout(r, 1500));
+  if (!currentOutline) {
+    toast('❌ הסיכום נכשל, נסה שוב', 'error');
+    document.getElementById('exportLabel').textContent = '📄 שמור ב-Google Docs';
+    document.getElementById('exportBtn').disabled = false;
+    return;
+  }
 
   document.getElementById('exportLabel').textContent = '⏳ יוצר מסמך...';
   document.getElementById('exportBtn').disabled = true;
@@ -808,7 +674,20 @@ async function exportToDocs() {
 // ─── Render ───────────────────────────────────────────────────────────────────
 function renderTranscript() {
   const box = document.getElementById('transcriptBox');
-  box.textContent = fullTranscript;
+  if (!fullTranscript) {
+    box.innerHTML = '<span class="empty-hint">התמלול יופיע כאן בזמן אמת...</span>';
+    return;
+  }
+  const lines = fullTranscript.split('\n').filter(l => l.trim());
+  box.innerHTML = lines.map(line => {
+    const timeMatch = line.match(/^\[(\d{2}:\d{2})\]\s*/);
+    if (timeMatch) {
+      const time = timeMatch[1];
+      const text = line.replace(/^\[\d{2}:\d{2}\]\s*/, '');
+      return `<div class="transcript-line"><span class="transcript-time">[${time}]</span> ${text}</div>`;
+    }
+    return `<div class="transcript-line">${line}</div>`;
+  }).join('');
   box.scrollTop = box.scrollHeight;
 }
 
